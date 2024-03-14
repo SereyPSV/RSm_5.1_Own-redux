@@ -1,36 +1,47 @@
-import { products, selectors } from './constants.js'
-import { populateProductCard, renderCartTotal } from './renderer.js'
-import { calcCartTotal } from './calc.js';
+import { products, selectors } from "./constants.js";
+import { populateProductCard, renderCartTotal } from "./renderer.js";
+import { calcCartTotal } from "./calc.js";
+import { store } from "./redux/store.js";
+import { increaseQuantityActionCreator } from "./redux/actions.js";
 
 export function addHandlers(card) {
-    card.querySelector(selectors.increaseQuantityButton).addEventListener('click', handleIncreaseQuantity)
-    card.querySelector(selectors.decreaseQuantityButton).addEventListener('click', handleDecreaseQuantity)
+  card
+    .querySelector(selectors.increaseQuantityButton)
+    .addEventListener("click", handleIncreaseQuantity);
+  card
+    .querySelector(selectors.decreaseQuantityButton)
+    .addEventListener("click", handleDecreaseQuantity);
 }
 
 function handleIncreaseQuantity(e) {
-    const card = e.target.closest(selectors.product);
-    const id = Number(card.dataset.id);
-    const product = products.find(p => p.id === id);
+  const card = e.target.closest(selectors.product);
+  const id = Number(card.dataset.id);
 
-    if (!product) {
-        return;
-    }
+  console.log(store.state);
+  store.dispatch(increaseQuantityActionCreator(id));
+  console.log(store.state);
 
-    product.quantity += 1;
-    populateProductCard(product, card);
-    renderCartTotal(calcCartTotal(products));
+  // const product = products.find(p => p.id === id);
+
+  // if (!product) {
+  //     return;
+  // }
+
+  // product.quantity += 1;
+  // populateProductCard(product, card);
+  // renderCartTotal(calcCartTotal(products));
 }
 
 function handleDecreaseQuantity(e) {
-    const card = e.target.closest(selectors.product);
-    const id = Number(card.dataset.id);
-    const product = products.find(p => p.id === id);
+  const card = e.target.closest(selectors.product);
+  const id = Number(card.dataset.id);
+  const product = products.find((p) => p.id === id);
 
-    if (product && product.quantity === 0) {
-        return;
-    }
+  if (product && product.quantity === 0) {
+    return;
+  }
 
-    product.quantity -= 1;
-    populateProductCard(product, card);
-    renderCartTotal(calcCartTotal(products));
+  product.quantity -= 1;
+  populateProductCard(product, card);
+  renderCartTotal(calcCartTotal(products));
 }

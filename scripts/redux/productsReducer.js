@@ -1,6 +1,10 @@
-import { DECREASE_QUANTITY_ACTION, INCREASE_QUANTITY_ACTION } from "./actions";
+import { products } from "../constants.js";
+import {
+  DECREASE_QUANTITY_ACTION,
+  INCREASE_QUANTITY_ACTION,
+} from "./actions.js";
 
-export function productsReducer(state, action) {
+export function productsReducer(state = products, action) {
   switch (action.type) {
     case INCREASE_QUANTITY_ACTION:
       return state.map((product) => {
